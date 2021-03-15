@@ -60,6 +60,7 @@
                 </subviews>
             </tableViewCellContentView>
             <connections>
+                <outlet property="containerRating" destination="Ep2-1Q-tr1" id="T7G-Td-psI"/>
                 <outlet property="imageThumbnail" destination="n9O-rq-gvG" id="PiZ-fl-6yA"/>
                 <outlet property="labelPrice" destination="RlM-ir-bOv" id="bll-VR-ggk"/>
                 <outlet property="labelRating" destination="oL5-YQ-3xd" id="ffe-YF-HFK"/>

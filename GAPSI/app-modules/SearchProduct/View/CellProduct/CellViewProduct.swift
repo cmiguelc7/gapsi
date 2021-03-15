@@ -14,6 +14,7 @@ class CellViewProduct: UITableViewCell {
     @IBOutlet weak var labelTitle: UILabel!
     @IBOutlet weak var labelPrice: UILabel!
     @IBOutlet weak var labelSKU: UILabel!
+    @IBOutlet weak var containerRating: UIView!
     
     
     @IBOutlet weak var labelRating: UILabel!
@@ -32,7 +33,11 @@ class CellViewProduct: UITableViewCell {
         labelTitle.text = product.title
         labelPrice.text = cleanMXN(product.price)
         labelSKU.text = String(format: "SKU: %@", product.id!)
-        labelRating.text = String(format: "%.2f", product.rating!)
+        if product.rating != nil {
+            labelRating.text = String(format: "%.2f", product.rating!)
+        }else{
+            containerRating.isHidden = true
+        }
         
         imageThumbnail.sd_imageIndicator = SDWebImageActivityIndicator.gray
         imageThumbnail.sd_setImage(
