@@ -93,7 +93,7 @@ class SearchProductViewController: UIViewController, UITableViewDelegate, UITabl
             ativityIndicatorLoadInformation.startAnimating()
             presenter?.getSearchProduct(criteria: criteria)
         }else{
-            print("No tienes internet")
+            showAlert(message: "No tienes inernet, revisa tu conexión.")
         }
     }
     
@@ -112,10 +112,22 @@ class SearchProductViewController: UIViewController, UITableViewDelegate, UITabl
     
     func showViewErrorInServer() {
         print("showViewErrorInServer")
+        showAlert(message: "Hubo un problema en el servidor, por favor intente más tarde.")
+        DispatchQueue.main.async {
+            self.ativityIndicatorLoadInformation.stopAnimating()
+            self.tableViewProducts.reloadData()
+            self.searchController.isActive = false
+        }
     }
     
     func showViewErrorNoResults() {
         print("showViewErrorNoResults")
+        showAlert(message: "Sin resultados por el momento")
+        DispatchQueue.main.async {
+            self.ativityIndicatorLoadInformation.stopAnimating()
+            self.tableViewProducts.reloadData()
+            self.searchController.isActive = false
+        }
     }
     
     
