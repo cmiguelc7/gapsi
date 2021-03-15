@@ -16,14 +16,15 @@ class SearchProductViewController: UIViewController, UITableViewDelegate, UITabl
     var presenter:SearchProductPresenterProtocol?
     
     var searchController:UISearchController!
-    
     var arrayLocalSearchProduct:[Product] = []
-    
     var ativityIndicatorLoadInformation = UIActivityIndicatorView()
+    var arrayLastSearches:[String] = []
+    var isSearchActive:Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configVIPER()
+        configData()
         configUI()
     }
     
@@ -36,14 +37,24 @@ class SearchProductViewController: UIViewController, UITableViewDelegate, UITabl
         presenter?.viewDidLoad()
     }
     
+    func configData(){
+        
+        arrayLastSearches = UserDefaults.standard.stringArray(forKey: UDefaults.kLastSearches.rawValue) ?? [String]()
+        
+    }
+    
     func configUI(){
         
         searchBar()
       
         tableViewProducts.delegate = self
         tableViewProducts.dataSource = self
+        let nib = UINib(nibName: "CellViewProduct", bundle: nil)
+        tableViewProducts.register(nib, forCellReuseIdentifier: "CellViewProduct")
+        ativityIndicatorLoadInformation.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
         tableViewProducts.backgroundView = ativityIndicatorLoadInformation
         tableViewProducts.tableFooterView = .init()
+        
                 
     }
     
@@ -76,6 +87,9 @@ class SearchProductViewController: UIViewController, UITableViewDelegate, UITabl
                 arrayLocalSearchProduct.removeAll()
                 tableViewProducts.reloadData()
             }
+            
+            hideLastSearches()
+            
             ativityIndicatorLoadInformation.startAnimating()
             presenter?.getSearchProduct(criteria: criteria)
         }else{
@@ -110,60 +124,104 @@ class SearchProductViewController: UIViewController, UITableViewDelegate, UITabl
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
 
         let sectionName: String
-        switch section {
-            case 0:
-                if arrayLocalSearchProduct.count > 0{
-                    sectionName = "Lista de resultados"
-                }else{
+        
+        if !isSearchActive {
+            switch section {
+                case 0:
+                    if arrayLocalSearchProduct.count > 0{
+                        sectionName = "Lista de resultados"
+                    }else{
+                        sectionName = ""
+                    }
+                default:
                     sectionName = ""
-                }
-            default:
-                sectionName = ""
+            }
+        }else{
+            switch section {
+                case 0:
+                    if arrayLastSearches.count > 0{
+                        sectionName = "Últimas búsquedas"
+                    }else{
+                        sectionName = ""
+                    }
+                default:
+                    sectionName = ""
+            }
         }
+        
         return sectionName
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if !isSearchActive {
+            return arrayLocalSearchProduct.count
+        }else{
+            return arrayLastSearches.count
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
-        return arrayLocalSearchProduct.count
-        
+        if !isSearchActive {
+            return 100
+        }else{
+            return 50
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        var GeneralCell:UITableViewCell!
         
-        let productObject = arrayLocalSearchProduct[indexPath.row]
+        if !isSearchActive {
         
-        cell.textLabel?.text = productObject.title
-        cell.detailTextLabel?.text = productObject.id
+            let cellProduct = tableView.dequeueReusableCell(withIdentifier: "CellViewProduct", for: indexPath) as! CellViewProduct
+            
+            let productObject = arrayLocalSearchProduct[indexPath.row]
         
-        cell.imageView?.sd_imageIndicator = SDWebImageActivityIndicator.gray
-        cell.imageView?.sd_setImage(
-            with: URL(string: productObject.image!),
-            placeholderImage: UIImage(named: ""),
-            options: SDWebImageOptions(rawValue: 0),
-            completed: { image, error, cacheType, imageURL in
-                
-                if (error != nil) {
-                    // Failed to load image
-                    cell.imageView?.image = UIImage(named: "")
-                } else {
-                    // Successful in loading image
-                    cell.imageView?.image = image
-                }
-            }
-        )
+            cellProduct.configure(product: productObject)
+            cellProduct.selectionStyle = .none
+            
+            GeneralCell = cellProduct
+            
+        }else{
+            let cellLastSearches = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+            
+            let titleSearches = arrayLastSearches[indexPath.row]
+            cellLastSearches.textLabel?.text = titleSearches
+            
+            cellLastSearches.selectionStyle = .default
+            
+            GeneralCell = cellLastSearches
+        }
         
-        return cell
+        return GeneralCell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("didSelectRowAt")
+                
+        if !isSearchActive {
+            print("didSelectRowAt over Product")
+        }else{
+            let stringLastSearches = arrayLastSearches[indexPath.row]
+            searchController.searchBar.text = stringLastSearches
+            searchController.searchBar.resignFirstResponder()
+            initFlowSearchProduct(criteria: stringLastSearches)
+        }
     }
     
     func updateSearchResults(for searchController: UISearchController) {
+        
         print("updateSearchResults")
+        
+        if self.searchController.isActive {
+            showLastSearches()
+        }else{
+            hideLastSearches()
+        }
+        
+        print("activo = \(self.searchController.isActive)")
+        //showLastSearches()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -173,9 +231,54 @@ class SearchProductViewController: UIViewController, UITableViewDelegate, UITabl
         }
         
         if searchText != "" {
+            saveInLastSearches(title: searchText)
             initFlowSearchProduct(criteria: searchText)
         }
         
+    }
+    
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        print("Cancelo")
+        hideLastSearches()
+    }
+    
+    func hideLastSearches(){
+        isSearchActive = false
+        tableViewProducts.reloadData()
+    }
+    
+    //UserDefaults.standard.string(forKey: UDefaults.kUserId.rawValue)!
+    func showLastSearches(){
+        if arrayLastSearches.count > 0 {
+            print("Show List Last Searches")
+            isSearchActive = true
+            tableViewProducts.reloadData()
+            print("Quienes = \(arrayLastSearches)")
+        }else{
+            print("NADA de NADA")
+        }
+    }
+    
+    func saveInLastSearches(title: String) {
+        
+        if !arrayLastSearches.contains(title){
+            arrayLastSearches.append(title)
+            UserDefaults.standard.set(arrayLastSearches,forKey: UDefaults.kLastSearches.rawValue)
+            print("Se guardo correctamente")
+            print(arrayLastSearches)
+        }else{
+            print("Ya se encuentra agregado")
+        }
+        
+    }
+    
+    func showAlert(title:String = "GAPSI", message: String) {
+        let alertController = UIAlertController(title: title, message:
+        message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: {action in
+        }))
+        self.present(alertController, animated: true, completion: nil)
     }
     
 }

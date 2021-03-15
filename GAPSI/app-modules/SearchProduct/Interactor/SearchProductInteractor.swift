@@ -69,11 +69,12 @@ class SearchProductInteractor: SearchProductInteractorProtocol {
                         }
                         
                     } else {
-                        
+                        self.presenter?.showViewErrorInServer()
                     }
                     break
             case .failure(let error):
                 print("error tipificado ☹️ \(error.localizedDescription)")
+                self.presenter?.showViewErrorInServer()
                 break
             
             }

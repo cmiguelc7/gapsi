@@ -20,6 +20,8 @@
 		DB8A5ED725FFAA0400DE0103 /* SearchProductProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB8A5ECF25FFAA0300DE0103 /* SearchProductProtocol.swift */; };
 		DB8A5ED825FFAA0400DE0103 /* SearchProductInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB8A5ED125FFAA0300DE0103 /* SearchProductInteractor.swift */; };
 		DB8A5ED925FFAA0400DE0103 /* SearchProductRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB8A5ED325FFAA0300DE0103 /* SearchProductRouter.swift */; };
+		DB8A5EFC25FFCFB900DE0103 /* CellViewProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB8A5EFB25FFCFB900DE0103 /* CellViewProduct.swift */; };
+		DB8A5F0425FFD05700DE0103 /* CellViewProduct.xib in Resources */ = {isa = PBXBuildFile; fileRef = DB8A5F0325FFD05700DE0103 /* CellViewProduct.xib */; };
 		DBDF43BE25FFA450004BFCD7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DBDF43BD25FFA450004BFCD7 /* Assets.xcassets */; };
 		DBDF43CC25FFA450004BFCD7 /* GAPSITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBDF43CB25FFA450004BFCD7 /* GAPSITests.swift */; };
 		DBDF43D725FFA450004BFCD7 /* GAPSIUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBDF43D625FFA450004BFCD7 /* GAPSIUITests.swift */; };
@@ -58,6 +60,8 @@
 		DB8A5ECF25FFAA0300DE0103 /* SearchProductProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchProductProtocol.swift; sourceTree = "<group>"; };
 		DB8A5ED125FFAA0300DE0103 /* SearchProductInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchProductInteractor.swift; sourceTree = "<group>"; };
 		DB8A5ED325FFAA0300DE0103 /* SearchProductRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchProductRouter.swift; sourceTree = "<group>"; };
+		DB8A5EFB25FFCFB900DE0103 /* CellViewProduct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellViewProduct.swift; sourceTree = "<group>"; };
+		DB8A5F0325FFD05700DE0103 /* CellViewProduct.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CellViewProduct.xib; sourceTree = "<group>"; };
 		DBDF43B125FFA44E004BFCD7 /* GAPSI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GAPSI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBDF43BD25FFA450004BFCD7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DBDF43C225FFA450004BFCD7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -187,6 +191,8 @@
 		DB8A5ECC25FFAA0300DE0103 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				DB8A5EF925FFCF4E00DE0103 /* CellLastSearches */,
+				DB8A5EFA25FFCF4E00DE0103 /* CellProduct */,
 				DB8A5ECD25FFAA0300DE0103 /* SearchProductViewController.swift */,
 			);
 			path = View;
@@ -214,6 +220,22 @@
 				DB8A5ED325FFAA0300DE0103 /* SearchProductRouter.swift */,
 			);
 			path = Router;
+			sourceTree = "<group>";
+		};
+		DB8A5EF925FFCF4E00DE0103 /* CellLastSearches */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = CellLastSearches;
+			sourceTree = "<group>";
+		};
+		DB8A5EFA25FFCF4E00DE0103 /* CellProduct */ = {
+			isa = PBXGroup;
+			children = (
+				DB8A5EFB25FFCFB900DE0103 /* CellViewProduct.swift */,
+				DB8A5F0325FFD05700DE0103 /* CellViewProduct.xib */,
+			);
+			path = CellProduct;
 			sourceTree = "<group>";
 		};
 		DBDF43A825FFA44E004BFCD7 = {
@@ -374,6 +396,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DB8A5F0425FFD05700DE0103 /* CellViewProduct.xib in Resources */,
 				DB8A5EB825FFA8CC00DE0103 /* Main.storyboard in Resources */,
 				DB8A5EB725FFA8CC00DE0103 /* LaunchScreen.storyboard in Resources */,
 				DBDF43BE25FFA450004BFCD7 /* Assets.xcassets in Resources */,
@@ -452,6 +475,7 @@
 				DB8A5ED925FFAA0400DE0103 /* SearchProductRouter.swift in Sources */,
 				DB8A5ED625FFAA0400DE0103 /* SearchProductViewController.swift in Sources */,
 				DB8A5ED425FFAA0300DE0103 /* ProductEntity.swift in Sources */,
+				DB8A5EFC25FFCFB900DE0103 /* CellViewProduct.swift in Sources */,
 				DB8A5ED725FFAA0400DE0103 /* SearchProductProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -629,6 +653,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 953GVDZN9R;
 				INFOPLIST_FILE = GAPSI/Info.plist;
@@ -636,10 +661,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.gapsi.ecommerce.GAPSI;
+				PRODUCT_BUNDLE_IDENTIFIER = com.heanan.GAPSI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -649,6 +675,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 953GVDZN9R;
 				INFOPLIST_FILE = GAPSI/Info.plist;
@@ -656,10 +683,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.gapsi.ecommerce.GAPSI;
+				PRODUCT_BUNDLE_IDENTIFIER = com.heanan.GAPSI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

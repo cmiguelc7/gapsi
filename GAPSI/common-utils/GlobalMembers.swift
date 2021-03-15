@@ -1,9 +1,9 @@
 //
 //  GlobalMembers.swift
-//  kokatu
+//  GAPSI
 //
 //  Created by Cesar Miguel Chavez on 8/27/19.
-//  Copyright © 2019 Heanan. All rights reserved.
+//  Copyright © 2019. All rights reserved.
 //
 
 import Foundation
@@ -12,4 +12,9 @@ struct Constants {
     
     static var searchURL = ""
     
+}
+
+enum UDefaults:String{
+    
+    case kLastSearches = "LastSearches"
 }
