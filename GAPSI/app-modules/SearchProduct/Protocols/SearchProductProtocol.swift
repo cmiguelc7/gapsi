@@ -23,14 +23,14 @@ protocol SearchProductPresenterProtocol: class {
     var router: SearchProductRouterProtocol? {get set}
     
     func viewDidLoad()
-    func getSearchProduct()
+    func getSearchProduct(criteria:String)
 
 }
 
 protocol SearchProductInteractorProtocol: class {
     //Presenter -> Interactor
     var presenter: SearchProductOutputInteractorProtocol? {get set}
-    func requestSearchProduct(from view: UIViewController)
+    func requestSearchProduct(criteria:String)
 }
 
 protocol SearchProductOutputInteractorProtocol: class {

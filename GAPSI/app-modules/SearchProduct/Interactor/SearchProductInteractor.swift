@@ -7,23 +7,77 @@
 
 import Foundation
 import UIKit
+import Alamofire
+import ObjectMapper
 
 class SearchProductInteractor: SearchProductInteractorProtocol {
     
     var presenter: SearchProductOutputInteractorProtocol?
+    var alamoFireManager : SessionManager?
     
-    func requestSearchProduct(from view: UIViewController) {
+    func requestSearchProduct(criteria: String) {
         
-        var arrayResultSearchProduct:[Product] = []
+        var url = String(format: "https://00672285.us-south.apigw.appdomain.cloud/demo-gapsi/search?&query=[%@]", criteria)
         
-        let id          = "5T46E4NG6PS1"
-        let rating      = 4.5
-        let price       = 299.0
-        let image       = "https://i5.walmartimages.com/asr/afdb71df-4810-4e3e-9c3c-187e88a98619_1.9abc0f91d776fcbf0b8b580e875ed6c0.jpeg?odnHeight=200&odnWidth=200&odnBg=ffffff"
-        let title       = "Nintendo Switch Console with Neon Blue & Red Joy-Con."
+        url = url.replacingOccurrences(of: " ", with: "-")
+
         
-        arrayResultSearchProduct.append(Product(id: id, rating: rating, price: price, image: image, title: title))
-        self.presenter?.receiveSearchProduct(arraySearchProduct: arrayResultSearchProduct)
+        let headers: HTTPHeaders = [
+            "Content-Type": "application/json",
+            "X-IBM-Client-Id": "adb8204d-d574-4394-8c1a-53226a40876e"
+        ]
+        
+        let configuration = URLSessionConfiguration.default
+        configuration.timeoutIntervalForRequest = 60.0
+        configuration.timeoutIntervalForResource = 60.0
+        alamoFireManager = Alamofire.SessionManager(configuration: configuration)
+        
+        alamoFireManager!.request(url, method: .get, encoding: URLEncoding.default, headers: headers).responseJSON {
+            response in
+            
+            
+            switch (response.result) {
+                case .success:
+                                    
+                    if response.response?.statusCode == 200 {
+                        
+                        let result = response.result.value
+                        
+                        if result != nil && result is NSDictionary {
+                            
+                            let JSON = response.result.value as! NSDictionary
+                            let totalResults =  JSON.value(forKey: "totalResults") as! Int
+                            
+                            if totalResults > 0 {
+                                
+                                var arrayResultSearchProduct:[Product] = []
+                                
+                                let brastlewarkResponse = Mapper<SearchProductResponse>().map(JSONObject:response.result.value)
+                                let productsArray = brastlewarkResponse?.items
+                                
+                                for i in 0..<productsArray!.count{
+                                    if let newProduct = productsArray?[i]{
+                                        arrayResultSearchProduct.append(newProduct)
+                                    }
+                                }
+                                
+                                self.presenter?.receiveSearchProduct(arraySearchProduct: arrayResultSearchProduct)
+                                
+                            }else{
+                                self.presenter?.showViewErrorNoResults()
+                            }
+                        }
+                        
+                    } else {
+                        
+                    }
+                    break
+            case .failure(let error):
+                print("error tipificado ☹️ \(error.localizedDescription)")
+                break
+            
+            }
+        }
         
      }
 }

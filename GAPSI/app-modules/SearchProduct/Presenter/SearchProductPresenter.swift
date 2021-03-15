@@ -16,8 +16,8 @@ class SearchProductPresenter: SearchProductPresenterProtocol {
     
     func viewDidLoad() { }
     
-    func getSearchProduct() {
-        interactor?.requestSearchProduct(from: view as! UIViewController)
+    func getSearchProduct(criteria:String) {
+        interactor?.requestSearchProduct(criteria: criteria)
     }
         
 }
